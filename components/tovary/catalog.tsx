@@ -442,8 +442,8 @@ export function Catalog() {
       </div>
 
       <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
-        <div className="overflow-x-auto">
-        <div className="grid min-w-[1400px] grid-cols-[44px_56px_minmax(260px,2fr)_110px_140px_130px_100px_120px_130px_130px_48px] items-center gap-4 border-b border-border bg-secondary/40 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
+        {/* Table Header */}
+        <div className="grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
           <input
             type="checkbox"
             checked={allSelected}
@@ -451,68 +451,51 @@ export function Catalog() {
             aria-label="Выбрать все товары"
             className="size-4 shrink-0 rounded border border-border accent-primary"
           />
-          <div className="text-center">Фото</div>
-          <div>Наименование</div>
-          <div>Артикул</div>
-          <div>Баркод</div>
-          <div>Категория</div>
-          <div className="text-right">Остаток</div>
-          <div className="text-right">Опт цена</div>
-          <div className="text-right">Розничная цена</div>
-          <div className="text-right">Поставщики</div>
+          <div className="text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Фото</div>
+          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Наименование</div>
+          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Артикул</div>
+          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Баркод</div>
+          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Категория</div>
+          <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Остаток</div>
+          <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Опт цена</div>
+          <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Розничная цена</div>
+          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Поставщики</div>
           <div />
-        </div>
-        {/* Table Header */}
-        <div className="hidden">
-          <input
-            type="checkbox"
-            checked={allSelected}
-            onChange={toggleSelectAll}
-            aria-label="Выбрать все"
-            className="size-4 shrink-0 rounded border border-border accent-primary"
-          />
-          <div className="text-center">Фото</div>
-          <div>Товар</div>
-          <div>Артикул</div>
-          <div className="text-center">Штрих-код</div>
-          <div>Категория</div>
-          <div>Поставщик</div>
-          <div className="text-center">Остаток</div>
-          <div className="text-center">Действия</div>
         </div>
 
         {/* Table Body */}
-        {pagedRows.items.length > 0 ? (
-          <div className="divide-y divide-border">
-            {pagedRows.items.map((product) => (
-              <ProductRowV2
-                key={product.id}
-                product={product}
-                selected={selectedIds.has(product.id)}
-                onSelect={() => toggleSelect(product.id)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="flex min-h-[400px] flex-col items-center justify-center px-6 py-16 text-center">
-            <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-secondary">
-              <ImageIcon className="size-8 text-muted-foreground" />
+        <div className="overflow-x-auto">
+          {pagedRows.items.length > 0 ? (
+            <div className="divide-y divide-border">
+              {pagedRows.items.map((product) => (
+                <ProductRowV2
+                  key={product.id}
+                  product={product}
+                  selected={selectedIds.has(product.id)}
+                  onSelect={() => toggleSelect(product.id)}
+                />
+              ))}
             </div>
-            <h2 className="text-xl font-bold text-foreground">Товары не найдены</h2>
-            <p className="mt-2 max-w-md text-sm text-muted-foreground">
-              Измените параметры поиска или сбросьте фильтры, чтобы увидеть товары каталога.
-            </p>
-            <button
-              onClick={() => {
-                setQuery('')
-                filters.onReset()
-              }}
-              className="mt-4 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary/70"
-            >
-              Сбросить фильтры
-            </button>
-          </div>
-        )}
+          ) : (
+            <div className="flex min-h-[400px] flex-col items-center justify-center px-6 py-16 text-center">
+              <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-secondary">
+                <ImageIcon className="size-8 text-muted-foreground" />
+              </div>
+              <h2 className="text-xl font-bold text-foreground">Товары не найдены</h2>
+              <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                Измените параметры поиска или сбросьте фильтры, чтобы увидеть товары каталога.
+              </p>
+              <button
+                onClick={() => {
+                  setQuery('')
+                  filters.onReset()
+                }}
+                className="mt-4 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary/70"
+              >
+                Сбросить фильтры
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -587,8 +570,8 @@ function ProductRowV2({
   return (
     <div
       className={cn(
-        'group grid min-w-[1400px] grid-cols-[44px_56px_minmax(260px,2fr)_110px_140px_130px_100px_120px_130px_130px_48px] items-center gap-4 px-5 py-3 text-sm transition-colors hover:bg-primary/[0.035]',
-        selected && 'bg-primary/[0.06]',
+        'group grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 px-4 py-3 transition-colors hover:bg-muted/30',
+        selected && 'bg-muted/50',
       )}
     >
       <input
@@ -599,42 +582,39 @@ function ProductRowV2({
         className="size-4 shrink-0 rounded border border-border accent-primary"
       />
 
-      <div className="flex size-10 items-center justify-center rounded-lg bg-secondary/70 text-muted-foreground ring-1 ring-border/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-        <ImageIcon className="size-4" />
+      <div className="flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+        <ImageIcon className="size-3.5" />
       </div>
 
       <div className="min-w-0">
         <Link
           href={`/tovary/${product.id}`}
-          className="block truncate text-[14px] font-semibold leading-5 text-foreground transition-colors hover:text-primary"
+          className="block truncate text-[13px] font-medium text-foreground transition-colors hover:text-primary"
         >
           {product.name}
         </Link>
-        {product.status === 'inactive' && (
-          <span className="mt-1 inline-block rounded bg-secondary px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Неактивен</span>
-        )}
       </div>
 
       <div className="min-w-0">
-        <p className="truncate font-mono text-[12px] font-semibold tracking-[0.08em] text-foreground">{product.sku}</p>
+        <p className="truncate font-mono text-[12px] text-muted-foreground">{product.sku}</p>
       </div>
 
       <div className="min-w-0">
-        <p className="truncate font-mono text-[11px] tracking-[0.1em] text-muted-foreground">{product.barcode || '—'}</p>
+        <p className="truncate font-mono text-[12px] text-muted-foreground">{product.barcode || '—'}</p>
       </div>
 
       <div className="min-w-0">
-        <p className="truncate text-[13px] font-medium text-foreground">{product.category}</p>
+        <p className="truncate text-[12px] text-foreground">{product.category || '—'}</p>
       </div>
 
       <div className="text-right">
         <span
           title={product.zoneStock}
           className={cn(
-            'inline-flex min-w-[92px] justify-end rounded-lg px-2.5 py-1 font-mono text-[13px] font-bold tabular-nums',
-            outOfStock && 'bg-red-100 text-red-700 dark:bg-red-950/30 dark:text-red-400',
-            lowStock && 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400',
-            !outOfStock && !lowStock && 'bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400',
+            'inline-flex rounded px-2 py-1 font-mono text-[11px] font-semibold',
+            outOfStock && 'bg-red-100/60 text-red-700 dark:bg-red-950/40 dark:text-red-300',
+            lowStock && 'bg-yellow-100/60 text-yellow-700 dark:bg-yellow-950/40 dark:text-yellow-300',
+            !outOfStock && !lowStock && 'bg-green-100/60 text-green-700 dark:bg-green-950/40 dark:text-green-300',
           )}
         >
           {product.storeStock} {product.unit}
@@ -642,30 +622,32 @@ function ProductRowV2({
       </div>
 
       <div className="text-right">
-        <p className="whitespace-nowrap font-mono text-[13px] font-bold tabular-nums text-foreground">
-          {product.wholesalePrice > 0 ? `${formatUZS(product.wholesalePrice)} UZS` : '—'}
+        <p className="text-[12px] font-medium text-foreground">
+          {product.wholesalePrice > 0 ? formatUZS(product.wholesalePrice) : '—'}
         </p>
       </div>
 
       <div className="text-right">
-        <p className="whitespace-nowrap font-mono text-[13px] font-bold tabular-nums text-foreground">
-          {formatUZS(product.price)} <span className="text-[11px] font-semibold text-muted-foreground">UZS</span>
+        <p className="text-[12px] font-medium text-foreground">
+          {formatUZS(product.price)}
         </p>
       </div>
 
-      <div className="text-right">
-        <p className="truncate text-[13px] text-muted-foreground">
+      <div className="min-w-0">
+        <p className="truncate text-[12px] text-muted-foreground">
           {product.supplier || '—'}
         </p>
       </div>
 
-      <Link
-        href={`/tovary/${product.id}/edit`}
-        aria-label="Редактировать товар"
-        className="flex size-9 items-center justify-center rounded-lg text-muted-foreground opacity-0 transition-all hover:bg-secondary hover:text-primary focus:opacity-100 group-hover:opacity-100"
-      >
-        <Pencil className="size-4" />
-      </Link>
+      <div className="flex items-center justify-center">
+        <Link
+          href={`/tovary/${product.id}/edit`}
+          aria-label="Редактировать товар"
+          className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-primary"
+        >
+          <Pencil className="size-4" />
+        </Link>
+      </div>
     </div>
   )
 }
