@@ -473,7 +473,7 @@ export function Catalog() {
 
       <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
         <div className="overflow-x-auto">
-        <div className="grid min-w-[1200px] grid-cols-[44px_56px_minmax(290px,2fr)_125px_165px_150px_120px_180px_48px] items-center gap-4 border-b border-border bg-secondary/40 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
+        <div className="grid min-w-[1400px] grid-cols-[44px_56px_minmax(260px,2fr)_110px_140px_130px_100px_120px_130px_130px_48px] items-center gap-4 border-b border-border bg-secondary/40 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
           <input
             type="checkbox"
             checked={allSelected}
@@ -482,12 +482,14 @@ export function Catalog() {
             className="size-4 shrink-0 rounded border border-border accent-primary"
           />
           <div className="text-center">Фото</div>
-          <div>Товар</div>
+          <div>Наименование</div>
           <div>Артикул</div>
-          <div>Штрихкод</div>
+          <div>Баркод</div>
           <div>Категория</div>
           <div className="text-right">Остаток</div>
-          <div className="text-right">Цена</div>
+          <div className="text-right">Опт цена</div>
+          <div className="text-right">Розничная цена</div>
+          <div className="text-right">Поставщики</div>
           <div />
         </div>
         {/* Table Header */}
@@ -617,7 +619,7 @@ function ProductRowV2({
   return (
     <div
       className={cn(
-        'group grid min-w-[1200px] grid-cols-[44px_56px_minmax(290px,2fr)_125px_165px_150px_120px_180px_48px] items-center gap-4 px-5 py-3 text-sm transition-colors hover:bg-primary/[0.035]',
+        'group grid min-w-[1400px] grid-cols-[44px_56px_minmax(260px,2fr)_110px_140px_130px_100px_120px_130px_130px_48px] items-center gap-4 px-5 py-3 text-sm transition-colors hover:bg-primary/[0.035]',
         selected && 'bg-primary/[0.06]',
       )}
     >
@@ -640,10 +642,9 @@ function ProductRowV2({
         >
           {product.name}
         </Link>
-        <div className="mt-1 flex min-w-0 items-center gap-2 text-[12px] text-muted-foreground">
-          {product.status === 'inactive' ? <span className="rounded bg-secondary px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">Неактивен</span> : null}
-          <span className="truncate">{product.supplier || 'Поставщик не указан'}</span>
-        </div>
+        {product.status === 'inactive' && (
+          <span className="mt-1 inline-block rounded bg-secondary px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Неактивен</span>
+        )}
       </div>
 
       <div className="min-w-0">
@@ -656,7 +657,6 @@ function ProductRowV2({
 
       <div className="min-w-0">
         <p className="truncate text-[13px] font-medium text-foreground">{product.category}</p>
-        <p className="mt-1 truncate text-[12px] text-muted-foreground">{product.brand || 'Без бренда'}</p>
       </div>
 
       <div className="text-right">
@@ -671,15 +671,23 @@ function ProductRowV2({
         >
           {product.storeStock} {product.unit}
         </span>
-        <p className="mt-1 text-[11px] text-muted-foreground">Всего: {product.stock}</p>
       </div>
 
       <div className="text-right">
-        <p className="whitespace-nowrap font-mono text-[15px] font-bold tabular-nums text-foreground">
+        <p className="whitespace-nowrap font-mono text-[13px] font-bold tabular-nums text-foreground">
+          {product.wholesalePrice > 0 ? `${formatUZS(product.wholesalePrice)} UZS` : '—'}
+        </p>
+      </div>
+
+      <div className="text-right">
+        <p className="whitespace-nowrap font-mono text-[13px] font-bold tabular-nums text-foreground">
           {formatUZS(product.price)} <span className="text-[11px] font-semibold text-muted-foreground">UZS</span>
         </p>
-        <p className="mt-1 whitespace-nowrap font-mono text-[11px] tabular-nums text-muted-foreground">
-          Опт: {product.wholesalePrice > 0 ? `${formatUZS(product.wholesalePrice)} UZS` : '—'}
+      </div>
+
+      <div className="text-right">
+        <p className="truncate text-[13px] text-muted-foreground">
+          {product.supplier || '—'}
         </p>
       </div>
 
