@@ -441,10 +441,10 @@ export function Catalog() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
-        <div className="overflow-x-auto">
+      <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border/50">
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
           {/* Table Header */}
-          <div className="sticky top-0 z-10 grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
+          <div className="sticky top-0 z-10 grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 border-b border-border/60 bg-card/50 px-4 py-4 backdrop-blur-sm">
             <input
               type="checkbox"
               checked={allSelected}
@@ -452,15 +452,15 @@ export function Catalog() {
               aria-label="Выбрать все товары"
               className="size-4 shrink-0 rounded border border-border accent-primary"
             />
-            <div className="text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Фото</div>
-            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Наименование</div>
-            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Артикул</div>
-            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Баркод</div>
-            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Категория</div>
-            <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Остаток</div>
-            <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Опт цена</div>
-            <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Розничная цена</div>
-            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Поставщики</div>
+            <div className="text-center text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em] letter-spacing">Фото</div>
+            <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Наименование</div>
+            <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Артикул</div>
+            <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Баркод</div>
+            <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Категория</div>
+            <div className="text-right text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Остаток</div>
+            <div className="text-right text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Опт цена</div>
+            <div className="text-right text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Розничная цена</div>
+            <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.12em]">Поставщики</div>
             <div />
           </div>
 
@@ -570,8 +570,8 @@ function ProductRowV2({
   return (
     <div
       className={cn(
-        'group grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 px-4 py-3 transition-colors hover:bg-muted/30',
-        selected && 'bg-muted/50',
+        'group grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 px-4 py-4 transition-all duration-200 border-b border-border/40 hover:bg-muted/40',
+        selected && 'bg-muted/50 border-border/60',
       )}
     >
       <input
@@ -582,39 +582,39 @@ function ProductRowV2({
         className="size-4 shrink-0 rounded border border-border accent-primary"
       />
 
-      <div className="flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+      <div className="flex size-8 items-center justify-center rounded-md bg-muted/70 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
         <ImageIcon className="size-3.5" />
       </div>
 
       <div className="min-w-0">
         <Link
           href={`/tovary/${product.id}`}
-          className="block truncate text-[13px] font-medium text-foreground transition-colors hover:text-primary"
+          className="block truncate text-[13px] font-semibold text-foreground transition-colors hover:text-primary"
         >
           {product.name}
         </Link>
       </div>
 
       <div className="min-w-0">
-        <p className="truncate font-mono text-[12px] text-muted-foreground">{product.sku}</p>
+        <p className="truncate font-mono text-[11px] font-medium text-muted-foreground/80">{product.sku}</p>
       </div>
 
       <div className="min-w-0">
-        <p className="truncate font-mono text-[12px] text-muted-foreground">{product.barcode || '—'}</p>
+        <p className="truncate font-mono text-[11px] font-medium text-muted-foreground/80">{product.barcode || '—'}</p>
       </div>
 
       <div className="min-w-0">
-        <p className="truncate text-[12px] text-foreground">{product.category || '—'}</p>
+        <p className="truncate text-[12px] font-medium text-foreground">{product.category || '—'}</p>
       </div>
 
       <div className="text-right">
         <span
           title={product.zoneStock}
           className={cn(
-            'inline-flex rounded px-2 py-1 font-mono text-[11px] font-semibold',
-            outOfStock && 'bg-red-100/60 text-red-700 dark:bg-red-950/40 dark:text-red-300',
-            lowStock && 'bg-yellow-100/60 text-yellow-700 dark:bg-yellow-950/40 dark:text-yellow-300',
-            !outOfStock && !lowStock && 'bg-green-100/60 text-green-700 dark:bg-green-950/40 dark:text-green-300',
+            'inline-flex rounded-md px-2.5 py-1.5 font-mono text-[10px] font-bold tabular-nums tracking-wide transition-colors',
+            outOfStock && 'bg-red-100/75 text-red-800 dark:bg-red-950/60 dark:text-red-100',
+            lowStock && 'bg-yellow-100/75 text-yellow-800 dark:bg-yellow-950/60 dark:text-yellow-100',
+            !outOfStock && !lowStock && 'bg-green-100/75 text-green-800 dark:bg-green-950/60 dark:text-green-100',
           )}
         >
           {product.storeStock} {product.unit}
@@ -622,19 +622,19 @@ function ProductRowV2({
       </div>
 
       <div className="text-right">
-        <p className="text-[12px] font-medium text-foreground">
+        <p className="text-[13px] font-bold text-foreground tabular-nums tracking-tight">
           {product.wholesalePrice > 0 ? formatUZS(product.wholesalePrice) : '—'}
         </p>
       </div>
 
       <div className="text-right">
-        <p className="text-[12px] font-medium text-foreground">
+        <p className="text-[13px] font-bold text-foreground tabular-nums tracking-tight">
           {formatUZS(product.price)}
         </p>
       </div>
 
       <div className="min-w-0">
-        <p className="truncate text-[12px] text-muted-foreground">
+        <p className="truncate text-[12px] font-medium text-muted-foreground/80">
           {product.supplier || '—'}
         </p>
       </div>
@@ -643,7 +643,7 @@ function ProductRowV2({
         <Link
           href={`/tovary/${product.id}/edit`}
           aria-label="Редактировать товар"
-          className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-primary"
+          className="flex size-8 items-center justify-center rounded-md text-muted-foreground/60 transition-all hover:bg-primary/10 hover:text-primary group-hover:opacity-100 opacity-0"
         >
           <Pencil className="size-4" />
         </Link>

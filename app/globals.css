@@ -184,6 +184,23 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  
+  .scrollbar-thumb-rounded-full::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thumb-muted-foreground\/20::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.2);
+  }
+  
+  .scrollbar-thin:hover .scrollbar-thumb-muted-foreground\/40::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.4);
+  }
 }
 
 @keyframes fade-up {
