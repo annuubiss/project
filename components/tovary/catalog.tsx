@@ -12,7 +12,6 @@ import {
   Plus,
   Settings2,
   SlidersHorizontal,
-  Tag,
   Shapes,
   Trash2,
 } from 'lucide-react'
@@ -24,18 +23,12 @@ import {
   type CatalogProduct,
 } from '@/lib/erp/product-catalog'
 import {
-  createBrand,
   createCategory,
-  deleteBrand,
   deleteCategory,
-  getActiveBrandOptions,
   getActiveCategoryOptions,
   PRODUCT_REFERENCES_CHANGED,
-  readBrands,
   readCategories,
-  updateBrand,
   updateCategory,
-  type ProductBrand,
   type ProductCategory,
 } from '@/lib/erp/categories'
 import { exportCsv, exportDateStamp, exportExcel, exportJson } from '@/lib/erp/export'
@@ -51,8 +44,7 @@ import { ExportActions } from '@/components/ui/export-actions'
 import { BulkActionsModal } from './bulk-actions-modal'
 
 type TabId = 'all' | 'active' | 'inactive' | 'low' | 'out'
-type SortValue = 'updated-desc' | 'updated-asc' | 'name-asc' | 'stock-desc' | 'price-desc'
-type ManagerKind = 'category' | 'brand'
+type SortValue = 'updated-asc' | 'name-asc' | 'stock-desc' | 'price-desc'
 
 type CatalogRow = CatalogProduct & {
   storeStock: number
@@ -68,7 +60,6 @@ const tabLabels: Array<{ id: TabId; label: string }> = [
 ]
 
 const sortOptions: Array<{ value: SortValue; label: string }> = [
-  { value: 'updated-desc', label: 'Сначала новые' },
   { value: 'updated-asc', label: 'Сначала старые' },
   { value: 'name-asc', label: 'По названию' },
   { value: 'stock-desc', label: 'По остатку' },
@@ -89,19 +80,17 @@ const defaultFields = [
 export function Catalog() {
   const [activeTab, setActiveTab] = useState<TabId>('all')
   const [query, setQuery] = useState('')
-  const [sortValue, setSortValue] = useState<SortValue>('updated-desc')
+  const [sortValue, setSortValue] = useState<SortValue>('name-asc')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(50)
   const [fieldsOpen, setFieldsOpen] = useState(false)
   const [products, setProducts] = useState<CatalogProduct[]>([])
   const [categories, setCategories] = useState<ProductCategory[]>([])
-  const [brands, setBrands] = useState<ProductBrand[]>([])
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [showBulkActions, setShowBulkActions] = useState(false)
-  const [managerKind, setManagerKind] = useState<ManagerKind | null>(null)
+  const [managerKind, setManagerKind] = useState<'category' | null>(null)
   const filters = useFilters({
     category: '',
-    brand: '',
     supplier: '',
     status: '',
   })
@@ -110,7 +99,6 @@ export function Catalog() {
     function load() {
       setProducts(readProducts())
       setCategories(readCategories())
-      setBrands(readBrands())
     }
 
     load()
@@ -145,15 +133,6 @@ export function Catalog() {
         })),
       },
       {
-        key: 'brand',
-        label: 'Бренд',
-        type: 'select' as const,
-        options: getActiveBrandOptions().map((item) => ({
-          value: item.name,
-          label: item.name,
-        })),
-      },
-      {
         key: 'supplier',
         label: 'Поставщик',
         type: 'text' as const,
@@ -168,7 +147,7 @@ export function Catalog() {
         ],
       },
     ],
-    [categories, brands],
+    [categories],
   )
 
   const rows = useMemo<CatalogRow[]>(
@@ -205,12 +184,11 @@ export function Catalog() {
       sort: resolveSort(sortValue),
       filters: {
         category: filters.values.category,
-        brand: filters.values.brand,
         supplier: filters.values.supplier,
         status: filters.values.status,
       },
       search: query,
-      searchKeys: ['name', 'sku', 'barcode', 'category', 'brand', 'supplier'],
+      searchKeys: ['name', 'sku', 'barcode', 'category', 'supplier'],
     }).items
   }, [activeTab, filters.values, query, rows, sortValue])
 
@@ -440,14 +418,6 @@ export function Catalog() {
           </button>
 
           <button
-            onClick={() => setManagerKind('brand')}
-            className="flex h-11 items-center justify-center gap-2 rounded-lg bg-card px-4 text-sm font-medium text-foreground ring-1 ring-border transition-colors hover:bg-secondary"
-          >
-            <Tag className="size-4 text-primary" />
-            Бренды
-          </button>
-
-          <button
             onClick={() => setShowBulkActions(true)}
             disabled={selectedIds.size === 0}
             className="flex h-11 items-center justify-center gap-2 rounded-lg bg-card px-4 text-sm font-medium text-foreground ring-1 ring-border transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
@@ -580,7 +550,6 @@ export function Catalog() {
         <ReferenceManagerModal
           kind={managerKind}
           categories={categories}
-          brands={brands}
           onClose={() => setManagerKind(null)}
         />
       ) : null}
@@ -600,8 +569,7 @@ function resolveSort(value: SortValue): SortConfig<CatalogRow> {
   if (value === 'updated-asc') return { key: 'updatedAt', dir: 'asc' }
   if (value === 'name-asc') return { key: 'name', dir: 'asc' }
   if (value === 'stock-desc') return { key: 'stock', dir: 'desc' }
-  if (value === 'price-desc') return { key: 'price', dir: 'desc' }
-  return { key: 'updatedAt', dir: 'desc' }
+  return { key: 'price', dir: 'desc' }
 }
 
 function ProductRowV2({
@@ -889,7 +857,7 @@ function TableFieldsModal({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-between gap-4 border-b border-border p-5">
           <button
             onClick={onClose}
-            aria-label="Назад"
+            aria-label="На��ад"
             className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-muted-foreground transition-colors hover:text-foreground"
           >
             <ChevronLeft className="size-5" />
@@ -962,19 +930,15 @@ function TableFieldsModal({ onClose }: { onClose: () => void }) {
 function ReferenceManagerModal({
   kind,
   categories,
-  brands,
   onClose,
 }: {
-  kind: ManagerKind
+  kind: 'category'
   categories: ProductCategory[]
-  brands: ProductBrand[]
   onClose: () => void
 }) {
-  const isCategory = kind === 'category'
-  const items = isCategory ? categories : brands
+  const items = categories
   const [editingId, setEditingId] = useState<string | null>(null)
   const [name, setName] = useState('')
-  const [country, setCountry] = useState('')
   const [parentId, setParentId] = useState('')
   const [error, setError] = useState('')
 
@@ -986,50 +950,29 @@ function ReferenceManagerModal({
   function resetForm() {
     setEditingId(null)
     setName('')
-    setCountry('')
     setParentId('')
     setError('')
   }
 
-  function startEdit(item: ProductCategory | ProductBrand) {
+  function startEdit(item: ProductCategory) {
     setEditingId(item.id)
     setName(item.name)
     setError('')
-
-    if (isCategory) {
-      setParentId((item as ProductCategory).parentId ?? '')
-      setCountry('')
-    } else {
-      setCountry((item as ProductBrand).country ?? '')
-      setParentId('')
-    }
+    setParentId(item.parentId ?? '')
   }
 
   function submit() {
     try {
-      if (isCategory) {
-        if (editingId) {
-          updateCategory({
-            id: editingId,
-            name,
-            parentId: parentId || null,
-          })
-        } else {
-          createCategory({
-            name,
-            parentId: parentId || null,
-          })
-        }
-      } else if (editingId) {
-        updateBrand({
+      if (editingId) {
+        updateCategory({
           id: editingId,
           name,
-          country,
+          parentId: parentId || null,
         })
       } else {
-        createBrand({
+        createCategory({
           name,
-          country,
+          parentId: parentId || null,
         })
       }
 
@@ -1040,8 +983,7 @@ function ReferenceManagerModal({
   }
 
   function archive(id: string) {
-    if (isCategory) deleteCategory(id)
-    else deleteBrand(id)
+    deleteCategory(id)
 
     if (editingId === id) resetForm()
   }
@@ -1056,13 +998,9 @@ function ReferenceManagerModal({
       <div className="relative z-10 w-full max-w-4xl rounded-3xl bg-card shadow-xl ring-1 ring-border">
         <div className="flex items-center justify-between gap-4 border-b border-border p-5">
           <div>
-            <h2 className="text-2xl font-black text-foreground">
-              {isCategory ? 'Категории' : 'Бренды'}
-            </h2>
+            <h2 className="text-2xl font-black text-foreground">Категории</h2>
             <p className="mt-1 text-[14px] text-muted-foreground">
-              {isCategory
-                ? 'Управление категориями каталога'
-                : 'Управление брендами каталога'}
+              Управление категориями каталога
             </p>
           </div>
           <button
@@ -1084,11 +1022,9 @@ function ReferenceManagerModal({
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-semibold text-foreground">{item.name}</p>
                     <p className="truncate text-[13px] text-muted-foreground">
-                      {isCategory
-                        ? (item as ProductCategory).parentId
-                          ? activeParents.find((parent) => parent.id === (item as ProductCategory).parentId)?.name || 'Подкатегория'
-                          : 'Основная категория'
-                        : (item as ProductBrand).country || 'Страна не указана'}
+                      {item.parentId
+                        ? activeParents.find((parent) => parent.id === item.parentId)?.name || 'Подкатегория'
+                        : 'Основная категория'}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -1116,9 +1052,7 @@ function ReferenceManagerModal({
 
           <div className="rounded-3xl bg-secondary/60 p-5 ring-1 ring-border">
             <h3 className="text-lg font-bold text-foreground">
-              {editingId
-                ? `Редактировать ${isCategory ? 'категорию' : 'бренд'}`
-                : `Новый ${isCategory ? 'элемент категории' : 'бренд'}`}
+              {editingId ? 'Редактировать категорию' : 'Новая категория'}
             </h3>
 
             <div className="mt-5 space-y-4">
@@ -1131,37 +1065,26 @@ function ReferenceManagerModal({
                 />
               </div>
 
-              {isCategory ? (
-                <div className="space-y-2">
-                  <label className="text-[14px] font-medium text-muted-foreground">Родитель</label>
-                  <div className="relative">
-                    <select
-                      value={parentId}
-                      onChange={(event) => setParentId(event.target.value)}
-                      className="h-12 w-full appearance-none rounded-2xl bg-card px-4 pr-10 text-[15px] text-foreground outline-none ring-1 ring-border transition-shadow focus:ring-2 focus:ring-primary/40"
-                    >
-                      <option value="">Без родителя</option>
-                      {activeParents
-                        .filter((item) => item.id !== editingId)
-                        .map((item) => (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        ))}
-                    </select>
-                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                  </div>
+              <div className="space-y-2">
+                <label className="text-[14px] font-medium text-muted-foreground">Родитель</label>
+                <div className="relative">
+                  <select
+                    value={parentId}
+                    onChange={(event) => setParentId(event.target.value)}
+                    className="h-12 w-full appearance-none rounded-2xl bg-card px-4 pr-10 text-[15px] text-foreground outline-none ring-1 ring-border transition-shadow focus:ring-2 focus:ring-primary/40"
+                  >
+                    <option value="">Без родителя</option>
+                    {activeParents
+                      .filter((item) => item.id !== editingId)
+                      .map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  <label className="text-[14px] font-medium text-muted-foreground">Страна</label>
-                  <input
-                    value={country}
-                    onChange={(event) => setCountry(event.target.value)}
-                    className="h-12 w-full rounded-2xl bg-card px-4 text-[15px] text-foreground outline-none ring-1 ring-border transition-shadow focus:ring-2 focus:ring-primary/40"
-                  />
-                </div>
-              )}
+              </div>
 
               {error ? (
                 <div className="rounded-2xl bg-destructive/10 px-4 py-3 text-[14px] font-semibold text-destructive ring-1 ring-destructive/20">
