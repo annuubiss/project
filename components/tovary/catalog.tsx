@@ -442,29 +442,29 @@ export function Catalog() {
       </div>
 
       <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
-        {/* Table Header */}
-        <div className="grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
-          <input
-            type="checkbox"
-            checked={allSelected}
-            onChange={toggleSelectAll}
-            aria-label="Выбрать все товары"
-            className="size-4 shrink-0 rounded border border-border accent-primary"
-          />
-          <div className="text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Фото</div>
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Наименование</div>
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Артикул</div>
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Баркод</div>
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Категория</div>
-          <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Остаток</div>
-          <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Опт цена</div>
-          <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Розничная цена</div>
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Поставщики</div>
-          <div />
-        </div>
-
-        {/* Table Body */}
         <div className="overflow-x-auto">
+          {/* Table Header */}
+          <div className="sticky top-0 z-10 grid min-w-[1380px] grid-cols-[40px_44px_minmax(180px,1.4fr)_90px_110px_120px_90px_110px_110px_100px_44px] items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
+            <input
+              type="checkbox"
+              checked={allSelected}
+              onChange={toggleSelectAll}
+              aria-label="Выбрать все товары"
+              className="size-4 shrink-0 rounded border border-border accent-primary"
+            />
+            <div className="text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Фото</div>
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Наименование</div>
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Артикул</div>
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Баркод</div>
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Категория</div>
+            <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Остаток</div>
+            <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Опт цена</div>
+            <div className="text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Розничная цена</div>
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Поставщики</div>
+            <div />
+          </div>
+
+          {/* Table Body */}
           {pagedRows.items.length > 0 ? (
             <div className="divide-y divide-border">
               {pagedRows.items.map((product) => (
